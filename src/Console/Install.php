@@ -10,10 +10,17 @@ class Install extends AbstractCommand
     public function execute($args, $argsNamed)
     {
         $this->copyFolder(dirname(__FILE__) . '/../../templates/Block', get_template_directory() . '/components/Block');
+
+        $this->success('Successfully installed');
     }
 
     protected function copyFolder($source, $dest)
     {
+        if (is_dir($dest)) {
+            $this->error("Component already exists ({$dest})");
+            exit;
+        }
+
         mkdir($dest, 0755);
         foreach ($iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),

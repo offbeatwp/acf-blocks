@@ -10,10 +10,7 @@ class Service extends AbstractService
     {
         add_action('offbeat.component.register', [$this, 'registerComponent']);
         add_filter('block_categories', [$this, 'registerComponentsCategory'], 10, 2);
-    }
 
-    public function afterRegister()
-    {
         if(offbeat('console')->isConsole()) {
             offbeat('console')->register(Console\Install::class);
         }
