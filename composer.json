@@ -1,0 +1,21 @@
+{
+    "name": "offbeatwp/acf-blocks",
+    "description": "Make OffbeatWP components available as Editor blocks",
+    "type": "offbeatwp-service",
+    "require": {
+        "offbeatwp/acf-core": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Schrijver",
+            "email": "chris@raow.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OffbeatWP\\AcfBlocks\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
