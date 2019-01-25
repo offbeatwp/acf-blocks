@@ -4,7 +4,7 @@ namespace OffbeatWP\AcfBlocks;
 use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\Services\AbstractService;
 
-class AcfEditorBlockService extends AbstractService
+class Service extends AbstractService
 {
     public function register()
     {

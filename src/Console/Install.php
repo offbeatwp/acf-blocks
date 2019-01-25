@@ -5,14 +5,11 @@ use OffbeatWP\Console\AbstractCommand;
 
 class Install extends AbstractCommand
 {
-    const COMMAND = 'acf-layout:install';
+    const COMMAND = 'acf-blocks:install';
 
     public function execute($args, $argsNamed)
     {
-        $this->copyFolder(dirname(__FILE__) . '/../../templates/Row', get_template_directory() . '/components/Row');
-        $this->copyFolder(dirname(__FILE__) . '/../../templates/Component', get_template_directory() . '/components/Component');
-
-        copy(dirname(__FILE__) . '/../../templates/design.php', get_template_directory() . '/config/design.php');
+        $this->copyFolder(dirname(__FILE__) . '/../../templates/Block', get_template_directory() . '/components/Block');
     }
 
     protected function copyFolder($source, $dest)
