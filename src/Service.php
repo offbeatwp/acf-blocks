@@ -51,7 +51,7 @@ class Service extends AbstractService
             return null;
         }
 
-        $fields = ComponentFields::get($name);
+        $fields = ComponentFields::get($name, 'block');
 
         acf_add_local_field_group(array(
             'key'                   => 'block_component_' . $name,
