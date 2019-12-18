@@ -18,6 +18,8 @@ class Service extends AbstractService
 
     public function registerComponent($component)
     {
+        if (!function_exists('acf_register_block')) return null;
+
         $componentClass = $component['class'];
         if (!$componentClass::supports('editor')) {
             return null;
