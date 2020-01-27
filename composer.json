@@ -2,9 +2,6 @@
     "name": "offbeatwp/acf-blocks",
     "description": "Make OffbeatWP components available as Editor blocks",
     "type": "offbeatwp-service",
-    "require": {
-        "offbeatwp/acf-core": "1 - 2"
-    },
     "license": "MIT",
     "authors": [
         {
