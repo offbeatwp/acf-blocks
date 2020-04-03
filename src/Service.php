@@ -26,18 +26,25 @@ class Service extends AbstractService
         }
 
         acf_register_block(array(
-            'name'            => $component['name'],
+            'name'            => $this->normalizeName($component['name']),
             'component_id'    => $component['name'],
             'title'           => $componentClass::getName(),
             'description'     => $componentClass::getDescription(),
             'render_callback' => [$this, 'renderBlock'],
             'category'        => 'components',
-            'icon'            => 'wordpress',
+            'icon'            => isset($component['editor_icon']) ? $component['editor_icon'] : 'wordpress',
         ));
 
         add_action('init', function () use ($component) {
             $this->registerBlockFields($component['name']);
         });
+    }
+
+    public function normalizeName($name) {
+        $name = strtolower($name);
+        $name = str_replace(['_', '.', ' '], '-', $name);
+
+        return $name;
     }
 
     public function renderBlock($block)
@@ -56,7 +63,7 @@ class Service extends AbstractService
         $fields = ComponentFields::get($name, 'block');
 
         acf_add_local_field_group(array(
-            'key'                   => 'block_component_' . $name,
+            'key'                   => 'block_component_' . $this->normalizeName($name),
             'title'                 => $name,
             'fields'                => $fields,
             'location'              => array(
@@ -64,7 +71,7 @@ class Service extends AbstractService
                     array(
                         'param'    => 'block',
                         'operator' => '==',
-                        'value'    => 'acf/' . $name,
+                        'value'    => 'acf/' . $this->normalizeName($name),
                     ),
                 ),
             ),
