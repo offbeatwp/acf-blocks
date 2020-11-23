@@ -33,6 +33,12 @@ class Service extends AbstractService
             'render_callback' => [$this, 'renderBlock'],
             'category'        => 'components',
             'icon'            => isset($component['editor_icon']) ? $component['editor_icon'] : 'wordpress',
+            'supports'        => [
+                'align' => true,
+                'mode' => false,
+                '__experimental_jsx' => true
+            ],
+            'mode'            => 'preview',
         ));
 
         add_action('init', function () use ($component) {
