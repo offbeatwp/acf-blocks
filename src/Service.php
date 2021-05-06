@@ -34,9 +34,7 @@ class Service extends AbstractService
             'category'        => 'components',
             'icon'            => isset($component['editor_icon']) ? $component['editor_icon'] : 'wordpress',
             'supports'        => [
-                'align' => true,
-                'mode' => false,
-                '__experimental_jsx' => true
+                'jsx' => true
             ],
             'mode'            => 'preview',
         ));
