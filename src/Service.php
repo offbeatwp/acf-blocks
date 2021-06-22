@@ -32,7 +32,7 @@ class Service extends AbstractService
             'description'     => $componentClass::getDescription(),
             'render_callback' => [$this, 'renderBlock'],
             'category'        => 'components',
-            'icon'            => isset($component['editor_icon']) ? $component['editor_icon'] : 'wordpress',
+            'icon'            => $componentClass::getSetting('icon') ?? 'wordpress',
             'supports'        => [
                 'jsx' => true
             ],
