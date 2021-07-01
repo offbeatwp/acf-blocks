@@ -53,7 +53,14 @@ class Service extends AbstractService
 
     public function renderBlock($block)
     {
-        $blockContent = offbeat('components')->render($block['component_id'], get_fields());
+        $data = get_fields();
+        $data['block'] = $block;
+
+        if (!empty($block['className'])) {
+            $data['className'] = $block['className'];
+        }
+
+        $blockContent = offbeat('components')->render($block['component_id'], $data);
 
         echo offbeat('components')->render('block', ['blockContent' => $blockContent]);
     }
