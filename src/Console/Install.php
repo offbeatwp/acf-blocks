@@ -1,15 +1,18 @@
 <?php
+
 namespace OffbeatWP\AcfBlocks\Console;
 
 use OffbeatWP\Console\AbstractCommand;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class Install extends AbstractCommand
 {
-    const COMMAND = 'acf-blocks:install';
+    public const COMMAND = 'acf-blocks:install';
 
     public function execute($args, $argsNamed)
     {
-        $this->copyFolder(dirname(__FILE__) . '/../../templates/Block', get_template_directory() . '/components/Block');
+        $this->copyFolder(__DIR__ . '/../../templates/Block', get_template_directory() . '/components/Block');
 
         $this->success('Successfully installed');
     }
@@ -22,9 +25,9 @@ class Install extends AbstractCommand
         }
 
         mkdir($dest, 0755);
-        foreach ($iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST) as $item) {
+        foreach ($iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST) as $item) {
 
             if ($item->isDir()) {
                 mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
