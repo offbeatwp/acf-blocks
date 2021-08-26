@@ -1,7 +1,6 @@
 <?php
 namespace OffbeatWP\AcfBlocks\Console;
 
-use FilesystemIterator;
 use OffbeatWP\Console\AbstractCommand;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
