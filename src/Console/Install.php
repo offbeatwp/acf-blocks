@@ -26,7 +26,7 @@ class Install extends AbstractCommand
 
         mkdir($dest, 0755);
         foreach ($iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($source, FilesystemIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST) as $item) {
 
             if ($item->isDir()) {
