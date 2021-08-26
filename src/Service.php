@@ -1,4 +1,5 @@
 <?php
+
 namespace OffbeatWP\AcfBlocks;
 
 use OffbeatWP\AcfBlocks\Console\Install;
@@ -11,13 +12,14 @@ class Service extends AbstractService
     {
         add_action('offbeat.component.register', [$this, 'registerComponent']);
 
-        if(array_key_exists( 'block_categories_all' , $GLOBALS['wp_filter'])) {
+        // The block_categories filter is deprecated since WordPress 5.8.0, it's replacement is block_categories_all
+        if (array_key_exists('block_categories_all', $GLOBALS['wp_filter'])) {
             add_filter('block_categories_all', [$this, 'registerComponentsCategory'], 10, 2);
         } else {
             add_filter('block_categories', [$this, 'registerComponentsCategory'], 10, 2);
         }
 
-        if(offbeat('console')->isConsole()) {
+        if (offbeat('console')->isConsole()) {
             offbeat('console')->register(Install::class);
         }
     }
@@ -34,15 +36,15 @@ class Service extends AbstractService
         }
 
         acf_register_block([
-            'name'            => $this->normalizeName($component['name']),
-            'component_id'    => $component['name'],
-            'title'           => $componentClass::getName(),
-            'description'     => $componentClass::getDescription(),
+            'name' => $this->normalizeName($component['name']),
+            'component_id' => $component['name'],
+            'title' => $componentClass::getName(),
+            'description' => $componentClass::getDescription(),
             'render_callback' => [$this, 'renderBlock'],
-            'category'        => 'components',
-            'icon'            => $componentClass::getSetting('icon') ?? 'wordpress',
-            'supports'        => ['jsx' => true],
-            'mode'            => 'preview',
+            'category' => 'components',
+            'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
+            'supports' => ['jsx' => true],
+            'mode' => 'preview',
         ]);
 
         add_action('init', function () use ($component) {
@@ -56,6 +58,38 @@ class Service extends AbstractService
         $name = str_replace(['_', '.', ' '], '-', $name);
 
         return $name;
+    }
+
+    public function registerBlockFields($name): void
+    {
+        if (!function_exists('acf_add_local_field_group')) {
+            return;
+        }
+
+        $fields = ComponentFields::get($name, 'block');
+
+        acf_add_local_field_group([
+            'key' => 'block_component_' . $this->normalizeName($name),
+            'title' => $name,
+            'fields' => $fields,
+            'location' => [
+                [
+                    [
+                        'param' => 'block',
+                        'operator' => '==',
+                        'value' => 'acf/' . $this->normalizeName($name),
+                    ],
+                ],
+            ],
+            'menu_order' => 0,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'hide_on_screen' => '',
+            'active' => 1,
+            'description' => '',
+        ]);
     }
 
     public function renderBlock($block): void
@@ -72,47 +106,15 @@ class Service extends AbstractService
         echo offbeat('components')->render('block', ['blockContent' => $blockContent]);
     }
 
-    public function registerBlockFields($name): void
-    {
-        if (!function_exists('acf_add_local_field_group')) {
-            return;
-        }
-
-        $fields = ComponentFields::get($name, 'block');
-
-        acf_add_local_field_group([
-            'key'                   => 'block_component_' . $this->normalizeName($name),
-            'title'                 => $name,
-            'fields'                => $fields,
-            'location'              => [
-                [
-                    [
-                        'param'    => 'block',
-                        'operator' => '==',
-                        'value'    => 'acf/' . $this->normalizeName($name),
-                    ],
-                ],
-            ],
-            'menu_order'            => 0,
-            'position'              => 'normal',
-            'style'                 => 'default',
-            'label_placement'       => 'top',
-            'instruction_placement' => 'label',
-            'hide_on_screen'        => '',
-            'active'                => 1,
-            'description'           => '',
-        ]);
-    }
-
     public function registerComponentsCategory(array $categories): array
     {
         return array_merge(
             $categories,
             [
                 [
-                    'slug'  => 'components',
+                    'slug' => 'components',
                     'title' => __('Components', 'ofbeatwp'),
-                    'icon'  => 'wordpress',
+                    'icon' => 'wordpress',
                 ],
             ]
         );

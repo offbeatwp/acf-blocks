@@ -1,4 +1,5 @@
 <?php
+
 namespace OffbeatWP\AcfBlocks\Console;
 
 use OffbeatWP\Console\AbstractCommand;
