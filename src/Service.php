@@ -2,6 +2,7 @@
 
 namespace OffbeatWP\AcfBlocks;
 
+use ArrayAccess;
 use OffbeatWP\AcfBlocks\Console\Install;
 use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\Components\AbstractComponent;
@@ -101,6 +102,7 @@ class Service extends AbstractService
         ]);
     }
 
+    /** @param array|ArrayAccess $block */
     public function renderBlock($block): void
     {
         $data = get_fields();
