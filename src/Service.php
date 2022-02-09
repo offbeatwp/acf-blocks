@@ -2,21 +2,25 @@
 
 namespace OffbeatWP\AcfBlocks;
 
+use ArrayAccess;
 use OffbeatWP\AcfBlocks\Console\Install;
 use OffbeatWP\AcfCore\ComponentFields;
+use OffbeatWP\Components\AbstractComponent;
 use OffbeatWP\Services\AbstractService;
 
 class Service extends AbstractService
 {
     public function register(): void
     {
+        global $wp_version;
+
         add_action('offbeat.component.register', [$this, 'registerComponent']);
 
         // The block_categories filter is deprecated since WordPress 5.8.0, it's replacement is block_categories_all
-        if (array_key_exists('block_categories_all', $GLOBALS['wp_filter'])) {
-            add_filter('block_categories_all', [$this, 'registerComponentsCategory'], 10, 2);
-        } else {
+        if (version_compare($wp_version, '5.8-beta0', '<')) {
             add_filter('block_categories', [$this, 'registerComponentsCategory'], 10, 2);
+        } else {
+            add_filter('block_categories_all', [$this, 'registerComponentsCategory'], 10, 2);
         }
 
         if (offbeat('console')->isConsole()) {
@@ -24,6 +28,7 @@ class Service extends AbstractService
         }
     }
 
+    /** @param array{name: string, class: class-string<AbstractComponent>} $component */
     public function registerComponent($component): void
     {
         if (!function_exists('acf_register_block')) {
@@ -52,6 +57,10 @@ class Service extends AbstractService
         });
     }
 
+    /**
+     * @param non-empty-string $name
+     * @return string
+     */
     public function normalizeName($name): string
     {
         $name = strtolower($name);
@@ -60,6 +69,7 @@ class Service extends AbstractService
         return $name;
     }
 
+    /** @param non-empty-string $name */
     public function registerBlockFields($name): void
     {
         if (!function_exists('acf_add_local_field_group')) {
@@ -92,6 +102,7 @@ class Service extends AbstractService
         ]);
     }
 
+    /** @param array|ArrayAccess $block */
     public function renderBlock($block): void
     {
         $data = get_fields();
