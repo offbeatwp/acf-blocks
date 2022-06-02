@@ -76,7 +76,13 @@ class Service extends AbstractService
             return;
         }
 
-        $fields = ComponentFields::get($name, 'block');
+        $transientName = 'offbeat/acf_blocks/fields/' . $name;
+        $fields = get_transient($transientName);
+
+        if (empty($fields)) {
+            $fields = ComponentFields::get($name, 'block');
+            set_transient($transientName, $fields);
+        }
 
         acf_add_local_field_group([
             'key' => 'block_component_' . $this->normalizeName($name),
