@@ -76,22 +76,12 @@ class Service extends AbstractService
             return;
         }
 
-        $fromCache = true;
-        if (defined('WP_ENV') && WP_ENV == 'development') {
-            $fromCache = false;
-        }
-
-        if ($fromCache) {
-            $transientName = 'offbeat/acf_blocks/fields/' . $name;
-            $fields = get_transient($transientName);
-        }
+        $transientName = 'offbeat/acf_blocks/fields/' . $name;
+        $fields = get_transient($transientName);
 
         if (empty($fields)) {
             $fields = ComponentFields::get($name, 'block');
-
-            if ($fromCache) {
-                set_transient($transientName, $fields);
-            }
+            set_transient($transientName, $fields);
         }
 
         acf_add_local_field_group([
@@ -127,6 +117,27 @@ class Service extends AbstractService
         if (!empty($block['className'])) {
             $data['className'] = $block['className'];
         }
+
+        if (!empty($block['align'])) {
+            switch($block['align'])
+            {
+                case 'full':
+                    $data['className'] .= 'alignfull';
+                    break;
+                case 'wide':
+                    $data['className'] .= 'alignwide';
+                    break;
+                case 'left':
+                    $data['className'] .= 'alignleft';
+                    break;
+                case 'right':
+                    $data['className'] .= 'alignright';
+                    break;
+            }
+        }
+
+        $data['className'] = trim($data['className']);
+        $data['cssClasses'] = $data['className'];
 
         $blockContent = offbeat('components')->render($block['component_id'], $data);
 
