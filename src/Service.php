@@ -114,6 +114,8 @@ class Service extends AbstractService
         $data = get_fields();
         $data['block'] = $block;
 
+        $data['className'] = '';
+        
         if (!empty($block['className'])) {
             $data['className'] = $block['className'];
         }
