@@ -46,6 +46,7 @@ class Service extends AbstractService
             'title' => $componentClass::getName(),
             'description' => $componentClass::getDescription(),
             'render_callback' => [$this, 'renderBlock'],
+            'enqueue_assets' => [$componentClass, '_enqueueAssets'],
             'category' => 'components',
             'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
             'supports' => ['jsx' => true],
