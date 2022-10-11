@@ -77,12 +77,16 @@ class Service extends AbstractService
             return;
         }
 
-        $transientName = 'offbeat/acf_blocks/fields/' . $name;
-        $fields = get_transient($transientName);
+        if (defined('WP_ENV') && WP_ENV === 'production') {
+            $transientName = 'offbeat/acf_blocks/fields/' . $name;
+            $fields = get_transient($transientName);
 
-        if (empty($fields)) {
+            if (empty($fields)) {
+                $fields = ComponentFields::get($name, 'block');
+                set_transient($transientName, $fields);
+            }
+        } else {
             $fields = ComponentFields::get($name, 'block');
-            set_transient($transientName, $fields);
         }
 
         acf_add_local_field_group([
