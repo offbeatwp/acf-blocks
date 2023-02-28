@@ -40,6 +40,8 @@ class Service extends AbstractService
             return;
         }
 
+        $blockSettings = $componentClass::getSetting('block') ?? [];
+
         acf_register_block([
             'name' => $this->normalizeName($component['name']),
             'component_id' => $component['name'],
@@ -49,7 +51,9 @@ class Service extends AbstractService
             'enqueue_assets' => [$componentClass, '_enqueueAssets'],
             'category' => 'components',
             'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
-            'supports' => ['jsx' => true],
+            'supports' => [
+                'jsx' => isset($blockSettings['jsx']) && is_bool($blockSettings['jsx']) ? $blockSettings['jsx'] : true
+            ],
             'mode' => 'preview',
         ]);
 
