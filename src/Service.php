@@ -118,11 +118,20 @@ class Service extends AbstractService
     }
 
     /** @param array|ArrayAccess $block */
-    public function renderBlock($block): void
+    public function renderBlock($block, $content, $isPreview, $postId, $wpBlock, $context): void
     {
         $data = get_fields();
         $data['block'] = $block;
 
+        $data['blockArgs'] = [
+            'block' => $block,
+            'content' => $content,
+            'isPreview' => $isPreview,
+            'postId' => $postId,
+            'wpBlock' => $wpBlock,
+            'context' => $context,
+        ];
+        
         $data['className'] = '';
         
         if (!empty($block['className'])) {
