@@ -23,7 +23,7 @@ class Service extends AbstractService
             add_filter('block_categories_all', [$this, 'registerComponentsCategory'], 10, 2);
         }
 
-        if (offbeat('console')->isConsole()) {
+        if (Console::isConsole()) {
             offbeat('console')->register(Install::class);
         }
     }
