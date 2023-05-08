@@ -2,11 +2,11 @@
 
 namespace OffbeatWP\AcfBlocks;
 
-use ArrayAccess;
 use OffbeatWP\AcfBlocks\Console\Install;
 use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\Components\AbstractComponent;
 use OffbeatWP\Services\AbstractService;
+use OffbeatWP\Support\Wordpress\Console;
 
 class Service extends AbstractService
 {
@@ -23,7 +23,7 @@ class Service extends AbstractService
             add_filter('block_categories_all', [$this, 'registerComponentsCategory'], 10, 2);
         }
 
-        if (offbeat('console')->isConsole()) {
+        if (Console::isConsole()) {
             offbeat('console')->register(Install::class);
         }
     }
@@ -117,8 +117,16 @@ class Service extends AbstractService
         ]);
     }
 
-    /** @param array|ArrayAccess $block */
-    public function renderBlock($block, $content, $isPreview, $postId, $wpBlock, $context): void
+    /**
+     * @param array $block
+     * @param $content
+     * @param bool $isPreview
+     * @param int $postId
+     * @param $wpBlock
+     * @param $context
+     * @return void
+     */
+    public function renderBlock($block, $content, $isPreview, $postId, $wpBlock, $context = null): void
     {
         $data = get_fields();
         $data['block'] = $block;
@@ -128,9 +136,12 @@ class Service extends AbstractService
             'content' => $content,
             'isPreview' => $isPreview,
             'postId' => $postId,
-            'wpBlock' => $wpBlock,
-            'context' => $context,
+            'wpBlock' => $wpBlock
         ];
+
+        if ($context !== null) {
+            $data['blockArgs']['context'] = $context;
+        }
         
         $data['className'] = '';
         
