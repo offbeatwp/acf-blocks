@@ -51,6 +51,8 @@ class Service extends AbstractService
             'enqueue_assets' => [$componentClass, '_enqueueAssets'],
             'category' => 'components',
             'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
+            'acf_block_version' => $blockSettings['block_version'] ?? '1',
+            'parent' => $blockSettings['parent'] ?? null,
             'supports' => [
                 'jsx' => isset($blockSettings['jsx']) && is_bool($blockSettings['jsx']) ? $blockSettings['jsx'] : true
             ],
