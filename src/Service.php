@@ -52,6 +52,7 @@ class Service extends AbstractService
             'category' => 'components',
             'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
             'acf_block_version' => $blockSettings['block_version'] ?? '1',
+            'uses_context' => $blockSettings['uses_context'] ?? null,
             'parent' => $blockSettings['parent'] ?? null,
             'supports' => [
                 'jsx' => isset($blockSettings['jsx']) && is_bool($blockSettings['jsx']) ? $blockSettings['jsx'] : true
