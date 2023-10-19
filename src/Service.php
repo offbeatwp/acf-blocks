@@ -88,7 +88,7 @@ class Service extends AbstractService
             $transientName = 'offbeat/acf_blocks/fields/' . $name;
             $fields = get_transient($transientName);
 
-            if (empty($fields)) {
+            if (!$fields) {
                 $fields = ComponentFields::get($name, 'block');
                 set_transient($transientName, $fields);
             }
@@ -131,7 +131,7 @@ class Service extends AbstractService
      */
     public function renderBlock($block, $content, $isPreview, $postId, $wpBlock, $context = null): void
     {
-        $data = get_fields();
+        $data = get_fields() ?: [];
         $data['block'] = $block;
 
         $data['blockArgs'] = [
