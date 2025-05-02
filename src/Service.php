@@ -42,7 +42,7 @@ class Service extends AbstractService
 
         $blockSettings = $componentClass::getSetting('block') ?? [];
 
-        acf_register_block([
+        $blockArgs = [
             'name' => $this->normalizeName($component['name']),
             'component_id' => $component['name'],
             'title' => $componentClass::getName(),
@@ -53,12 +53,18 @@ class Service extends AbstractService
             'icon' => $componentClass::getSetting('icon') ?? 'wordpress',
             'acf_block_version' => $blockSettings['block_version'] ?? '1',
             'uses_context' => $blockSettings['uses_context'] ?? null,
-            'parent' => isset($blockSettings['parent']) && is_array($blockSettings['parent']) ? $blockSettings['parent'] : [],
             'supports' => [
                 'jsx' => isset($blockSettings['jsx']) && is_bool($blockSettings['jsx']) ? $blockSettings['jsx'] : true
             ],
             'mode' => 'preview',
-        ]);
+        ];
+
+        // Add 'parent' only if explicitly set in block settings
+        if (isset($blockSettings['parent']) && is_array($blockSettings['parent'])) {
+            $blockArgs['parent'] = $blockSettings['parent'];
+        }
+
+        acf_register_block($blockArgs);
 
         add_action('init', function () use ($component) {
             $this->registerBlockFields($component['name']);
